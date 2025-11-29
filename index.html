@@ -895,45 +895,72 @@
     <img src="https://i.postimg.cc/zvd579bJ/ttbyq-shty-1.png" alt="شعار صحة" class="brand-logo" />
              
             </div>
-    <script>
-        // مكتبة بسيطة للتحويل من الميلادي إلى الهجري
-        function gregorianToHijri(date) {
-            const gDate = new Date(date);
-            const gYear = gDate.getFullYear();
-            const gMonth = gDate.getMonth() + 1;
-            const gDay = gDate.getDate();
-            
-            // معادلة تقريبية للتحويل (ليست دقيقة تماماً)
-            const hijriYear = Math.floor((gYear - 622) * (33/32));
-            const hijriMonth = gMonth;
-            const hijriDay = gDay;
-            
-            // تنسيق التاريخ الهجري
-            return `${hijriYear}/${hijriMonth}/${hijriDay} هـ`;
+     <script>
+        // دالة أدق للتحويل من الميلادي إلى الهجري (تقريبية لكن أفضل بكثير من الطرح المباشر)
+        function gregorianToHijri(dateStr) {
+            const date = new Date(dateStr);
+            const gYear  = date.getUTCFullYear();
+            const gMonth = date.getUTCMonth() + 1; // 1–12
+            const gDay   = date.getUTCDate();
+
+            // تحويل من ميلادي إلى رقم اليوم اليولياني (JDN)
+            const a  = Math.floor((14 - gMonth) / 12);
+            const y  = gYear + 4800 - a;
+            const m  = gMonth + 12 * a - 3;
+            const jd = gDay +
+                       Math.floor((153 * m + 2) / 5) +
+                       365 * y +
+                       Math.floor(y / 4) -
+                       Math.floor(y / 100) +
+                       Math.floor(y / 400) -
+                       32045;
+
+            // تحويل من JDN إلى هجري
+            let l  = jd - 1948440 + 10632;
+            const n = Math.floor((l - 1) / 10631);
+            l      = l - 10631 * n + 354;
+            const j = Math.floor((10985 - l) / 5316) *
+                      Math.floor((50 * l) / 17719) +
+                      Math.floor(l / 5670) *
+                      Math.floor((43 * l) / 15238);
+
+            l = l -
+                Math.floor((30 - j) / 15) *
+                Math.floor((17719 * j) / 50) -
+                Math.floor(j / 16) *
+                Math.floor((15238 * j) / 43) +
+                29;
+
+            const hijriMonth = Math.floor((24 * l) / 709);
+            const hijriDay   = l - Math.floor((709 * hijriMonth) / 24);
+            const hijriYear  = 30 * n + j - 30;
+
+            const mStr = hijriMonth.toString().padStart(2, "0");
+            const dStr = hijriDay.toString().padStart(2, "0");
+            return `${hijriYear}/${mStr}/${dStr} هـ`;
         }
 
-        // إضافة مستمعين للحقول التاريخية للتحويل التلقائي
+        // ربط حقول التاريخ الميلادي بالهجري
         document.getElementById('issueDateGregorian').addEventListener('change', function() {
-            if(this.value) {
+            if (this.value) {
                 document.getElementById('issueDateHijri').value = gregorianToHijri(this.value);
             }
         });
         
         document.getElementById('startDateGregorian').addEventListener('change', function() {
-            if(this.value) {
+            if (this.value) {
                 document.getElementById('startDateHijri').value = gregorianToHijri(this.value);
             }
         });
         
         document.getElementById('endDateGregorian').addEventListener('change', function() {
-            if(this.value) {
+            if (this.value) {
                 document.getElementById('endDateHijri').value = gregorianToHijri(this.value);
                 
-                // حساب المدة تلقائياً
                 const startDate = new Date(document.getElementById('startDateGregorian').value);
-                const endDate = new Date(this.value);
+                const endDate   = new Date(this.value);
                 
-                if(startDate && endDate && startDate <= endDate) {
+                if (startDate && endDate && startDate <= endDate) {
                     const diffTime = Math.abs(endDate - startDate);
                     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
                     document.getElementById('duration').value = diffDays;
@@ -945,7 +972,6 @@
         document.getElementById('sickLeaveForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // جمع بيانات النموذج
             const arabicName = document.getElementById('arabicName').value;
             const englishName = document.getElementById('englishName').value;
             const idNumber = document.getElementById('idNumber').value;
@@ -962,20 +988,16 @@
             const duration = document.getElementById('duration').value;
             const reportDetails = document.getElementById('reportDetails').value;
             
-            // إنشاء محتوى البريد الإلكتروني
             const subject = `طلب إجازة مرضية - ${reportTypeText}`;
             const body = `الاسم بالعربية: ${arabicName}%0D%0Aالاسم بالإنجليزية: ${englishName}%0D%0Aرقم الهوية: ${idNumber}%0D%0Aرقم الهاتف: ${phoneNumber}%0D%0Aالمنطقة: ${region}%0D%0Aنوع الإجازة: ${reportTypeText}%0D%0A%0D%0Aتفاصيل الإجازة:%0D%0A- تاريخ الإصدار (ميلادي): ${issueDateGregorian}%0D%0A- تاريخ الإصدار (هجري): ${issueDateHijri}%0D%0A- تبدأ من (ميلادي): ${startDateGregorian}%0D%0A- تبدأ من (هجري): ${startDateHijri}%0D%0A- تنتهي في (ميلادي): ${endDateGregorian}%0D%0A- تنتهي في (هجري): ${endDateHijri}%0D%0A- المدة: ${duration} يوم%0D%0A%0D%0Aالتفاصيل الإضافية:%0D%0A${reportDetails}%0D%0A%0D%0Aتم إرسال طلب الإجازة المرضية الإلكتروني.`;
             
-            // فتح تطبيق البريد الإلكتروني
             window.location.href = `mailto:seha.sa.2025@gmail.com?subject=${subject}&body=${body}`;
             
-            // إظهار رسالة النجاح
             const alertMessage = document.getElementById('alertMessage');
             alertMessage.textContent = 'تم إعداد طلب الإجازة بنجاح';
             alertMessage.className = 'alert alert-success';
             alertMessage.style.display = 'block';
             
-            // إظهار رسالة الاستجابة
             document.getElementById('responseMessage').innerHTML = 
                 '<p><strong>رد الدعم الفني:</strong></p>' +
                 '<p>شكراً لتواصلكم معنا. تم إعداد طلب الإجازة المرضية بنجاح.</p>' +
@@ -983,12 +1005,13 @@
                 '<p>سيتم مراجعة طلبك والرد عليه خلال 24-48 ساعة.</p>' +
                 '<p>مع تحياتنا،<br>منصة صحتي للإجازات المرضية</p>';
             
-            // إعادة تعيين النموذج بعد تأخير بسيط
             setTimeout(function() {
                 document.getElementById('sickLeaveForm').reset();
+                document.getElementById('issueDateHijri').value = '';
+                document.getElementById('startDateHijri').value = '';
+                document.getElementById('endDateHijri').value = '';
             }, 3000);
         });
     </script>
-    
 </body>
-</html>
+        </html>
