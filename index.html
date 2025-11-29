@@ -1,0 +1,994 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta name="google-site-verification" content="SXM-GBwV54gm_ST7j29Xt5w1T3AODQE3xs3DZYm_b5Y" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title> صحة - منصة الخدمات الصحية seha.sa</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    /* Global Styles */
+    * { 
+      font-family: 'Cairo', sans-serif !important; 
+      box-sizing: border-box; 
+    }
+    
+    body { 
+      background-color: #ffffff; 
+      margin: 0; 
+      padding: 30px 0 0 0; 
+      direction: rtl; 
+    }
+    
+    /* Header Section */
+    .top-header { 
+      background-color: #ffffff; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      padding: 10px 20px; 
+      position: fixed; 
+      top: -100px; 
+      left: 0; 
+      right: 0; 
+      opacity: 0; 
+      z-index: 1000; 
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+      transition: top 0.8s ease, opacity 0.8s ease; 
+    }
+    
+    .top-header.show { 
+      top: 0; 
+      opacity: 1; 
+    }
+    
+    .hamburger-icon { 
+      font-size: 26px; 
+      color: #67b3f5; 
+      cursor: pointer; 
+    }
+    
+    .brand-logo { 
+      height: 48px; 
+      object-fit: contain; 
+    }
+    
+    /* Main Content Description */
+    .primary-description {
+      font-size: 14px;
+      white-space: normal;
+      line-height: 1.6;
+      margin: 10px 20px 20px;
+    }
+    
+    @media (max-width: 400px) {
+      .primary-description {
+        font-size: 12px;
+        line-height: 1.5;
+      }
+    }
+
+    /* Main Title */
+    h1 { 
+      color: #2e6fb3; 
+      text-align: center; 
+      font-weight: 700; 
+      font-size: 35px; 
+      margin-top: 40px; 
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); 
+      position: relative; 
+      display: inline-block; 
+      width: auto; 
+    }
+    
+    h1::before { 
+      content: ""; 
+      position: absolute; 
+      top: 50%; 
+      left: 50%; 
+      transform: translate(-50%, -50%); 
+      background-image: url('https://i.postimg.cc/mktdLGnp/image.png'); 
+      background-size: cover; 
+      background-repeat: no-repeat; 
+      background-position: center; 
+      width: calc(100% + 20px); 
+      height: 80%; 
+      z-index: -1; 
+    }
+    
+    /* Paragraph Styles */
+    p { 
+      color: #6d7781; 
+      text-align: center; 
+      font-size: 16px; 
+      margin: 10px 20px 30px; 
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.05); 
+    }
+    
+    /* Form Input Styles */
+    .form-input-container { 
+      position: relative; 
+      margin-bottom: 1.5em; 
+    }
+    
+    .form-input-field { 
+      width: calc(100% - 30px); 
+      display: block; 
+      padding: 3px 12px; 
+      font-size: 14.5px; 
+      margin: 10px auto; 
+      border: 1px solid #ccc; 
+      border-radius: 8px; 
+      background-color: white; 
+      text-align: right; 
+      transition: border-color 0.3s ease; 
+    }
+    
+    .form-input-field:focus { 
+      border-color: #67b3f5; 
+      outline: none; 
+    }
+    
+    /* Button Styles */
+    .primary-btn, .secondary-btn, .tertiary-btn, .quaternary-btn { 
+      display: block; 
+      margin: 15px auto; 
+      padding: 6px 10px; 
+      background-color: #2e6fb9; 
+      color: white; 
+      border: none; 
+      border-radius: 8px; 
+      font-size: 12px; 
+      width: 120px; 
+      cursor: pointer; 
+      position: relative; 
+      overflow: hidden; 
+      transition: background-color 0.2s ease; 
+    }
+    
+    /* Loading Button State */
+    .primary-btn.loading {
+      background-color: #24568f; 
+      cursor: wait;
+    }
+    
+    /* Error Message Styles */
+    .error-message-tab { 
+      background-color: #ffe5e5; 
+      color: #990000; 
+      text-align: center; 
+      padding: 10px; 
+      margin: 10px auto; 
+      border-radius: 5px; 
+      width: calc(100% - 40px); 
+      display: none; 
+    }
+    
+    /* Result Display Box */
+    .results-display-box { 
+      background-color: #f0f0f0; 
+      padding: 20px; 
+      margin: 40px auto 20px; 
+      border-radius: 8px; 
+      width: calc(100% - 40px); 
+      text-align: center; 
+      display: none; 
+    }
+    
+    /* Information Labels */
+    .information-label { 
+      font-weight: bold; 
+      margin-top: 10px; 
+    }
+    
+    .information-data { 
+      margin-bottom: 15px; 
+    }
+    
+    /* Footer Section */
+    .page-footer { 
+      background-color: #2e6fb2; 
+      color: white; 
+      padding: 20px 15px 60px 20px; 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      justify-content: flex-start; 
+      text-align: center; 
+      font-size: 14px; 
+      direction: rtl; 
+      min-height: 180px; 
+      gap: 15px; 
+      position: relative; 
+    }
+    
+    .page-footer img.footer-brand-logo { 
+      height: 75px; 
+      filter: none; 
+      margin-bottom: 15px; 
+    }
+    
+    .footer-description-text { 
+      font-size: 13px; 
+      line-height: 1.7; 
+      white-space: normal; 
+      max-width: 700px; 
+    }
+    
+    /* Menu Title */
+    .primary-menu-title { 
+      font-weight: 700; 
+      font-size: 15px; 
+      margin-top: 30px; 
+      position: relative; 
+      display: inline-block; 
+      color: white; 
+      cursor: default; 
+    }
+    
+    .primary-menu-title::after { 
+      content: ""; 
+      position: absolute; 
+      bottom: -8px; 
+      left: 50%; 
+      transform: translateX(-50%); 
+      width: 130%; 
+      height: 3px; 
+      background-color: #a3c1e5; 
+      border-radius: 2px; 
+    }
+    
+    /* Footer Links */
+    .footer-navigation-links { 
+      margin-top: 5px; 
+      font-size: 13px; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 6px; 
+      user-select: none; 
+      width: 100%; 
+      max-width: 320px; 
+      padding: 0 10px; 
+    }
+    
+    .footer-navigation-links div { 
+      cursor: default; 
+      color: #ffffff; 
+      font-weight: normal; 
+      padding-bottom: 4px; 
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3); 
+      margin: 0 8px; 
+    }
+    
+    /* Popup Menu */
+    .navigation-popup-menu { 
+      position: fixed; 
+      top: 60px; 
+      left: 0; 
+      width: 100%; 
+      height: 50vh; 
+      background-color: #f8fcff; 
+      display: none; 
+      flex-direction: column; 
+      justify-content: flex-start; 
+      align-items: center; 
+      padding-top: 30px; 
+      z-index: 999; 
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1); 
+    }
+    
+    .navigation-popup-menu .popup-menu-item { 
+      font-size: 15px; 
+      color: #226699; 
+      margin: 15px 0; 
+      cursor: pointer; 
+      text-decoration: underline; 
+    }
+    
+    .navigation-popup-menu .popup-menu-login { 
+      background-color: #3c8dc4; 
+      color: white; 
+      padding: 8px 20px; 
+      border-radius: 12px; 
+      margin-top: 12px; 
+      font-size: 15px; 
+      cursor: pointer; 
+      display: inline-flex; 
+      align-items: center; 
+      justify-content: center; 
+      text-decoration: none; 
+    }
+    
+    .navigation-popup-menu .popup-menu-login span { 
+      margin-right: 8px; 
+    }
+    
+    .navigation-popup-menu .popup-close-btn { 
+      position: absolute; 
+      top: 10px; 
+      right: 15px; 
+      font-size: 24px; 
+      color: #333; 
+      cursor: pointer; 
+    }
+    
+    /* Button Display States */
+    .tertiary-btn, .quaternary-btn { 
+      display: none; 
+    }
+    
+    /* Text Formatting */
+    .text-bold { 
+      font-weight: bold; 
+      color: black; 
+    }
+    
+    .text-normal { 
+      font-weight: normal; 
+      color: black; 
+    }
+    
+    .information-label.text-bold { 
+      margin-bottom: 5px; 
+    }
+    
+    .information-label.text-normal { 
+      margin-top: 10px; 
+    }
+    
+    /* Contact Section */
+    .contact-section-title { 
+      font-weight: 700; 
+      font-size: 15px; 
+      margin-top: 20px; 
+      color: white; 
+    }
+    
+    .contact-divider-line { 
+      width: 160px; 
+      height: 4px; 
+      background-color: #a3c1e5; 
+      margin: 6px auto 2px auto; 
+      border-radius: 1px; 
+    }
+    
+    .contact-information { 
+      font-size: 14px; 
+      line-height: 1.6; 
+      color: white; 
+      max-width: 320px; 
+      text-align: center; 
+      user-select: none; 
+    }
+
+    /* Loading Spinner Animation */
+    .spinner-loading {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+      margin-right: 8px; 
+      vertical-align: middle;
+      display: none; 
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Empty Field Error Styling */
+    .empty-field-error-message {
+      background-color: #feeeee; 
+      color: #a00000; 
+      text-align: center;
+      padding: 10px;
+      margin: 15px auto 10px;
+      border-radius: 5px;
+      width: calc(100% - 40px);
+      font-weight: normal; 
+      display: none; 
+      transition: margin-top 0.3s ease; 
+    }
+
+  </style>
+</head>
+<body>
+  <!-- Header Navigation -->
+  
+  <div class="top-header" id="mainHeader">
+    <img src="https://i.postimg.cc/cHQphC4q/image.png" alt="شعار صحة" class="brand-logo" />
+    <img src="https://i.postimg.cc/66S0ss5J/png-clipart-riyadh-ministry-of-health-yanbu-church-logo-leaf-text-thumbnail-(1).png" alt="شعار وزارة الصحة" class="brand-logo" />
+    <img src="https://i.postimg.cc/brf28SL4/ttbyq-shty.png" alt="شعار صحة" class="brand-logo" />
+    <img src="https://i.postimg.cc/zvd579bJ/ttbyq-shty-1.png" alt="شعار صحة" class="brand-logo" />
+    
+    
+    <div class="hamburger-icon" id="hamburgerMenuIcon" onclick="toggleNavigationMenu()">&#9776;</div>
+  </div>
+
+  <!-- Navigation Popup Menu -->
+  <div class="navigation-popup-menu" id="navigationPopupMenu">
+    <div class="popup-close-btn" onclick="toggleNavigationMenu()">X</div>
+    <a href="https://www.seha.sa/ui#/services" class="popup-menu-item" onclick="toggleNavigationMenu()">الخدمات</a>
+    <a href="https://www.seha.sa/ui#/inquiries" class="popup-menu-item" onclick="toggleNavigationMenu()">الاستعلامات</a>
+    <a href="https://www.seha.sa/ui#/iamredirection/1" class="popup-menu-item" onclick="toggleNavigationMenu()">إنشاء حساب</a>
+    <a href="https://www.seha.sa/ui#/account/login" class="popup-menu-login" onclick="toggleNavigationMenu()"><span>👨‍💼</span>تسجيل الدخول</a>
+  </div>
+
+  <!-- Main Content Section -->
+  <div style="text-align: center;">
+    <h1>الإجازات المرضية</h1>
+  </div>
+  <p class="primary-description">
+    منظومة إلكترونية مخصّصة لتقديم وطلب الإجازات المرضية بطريقة سهلة وآمنة
+  </p>
+
+  <script>
+ 
+    // Main Data Validation and Search Function
+    function validateAndCheckData() {
+      const identityNumberInput = document.getElementById('identityNumber');
+      const serviceCodeInput = document.getElementById('serviceCode');
+      const identityNumber = identityNumberInput.value.trim();
+      const serviceCode = serviceCodeInput.value.trim();
+      const emptyFieldsErrorMessage = document.getElementById('emptyFieldsErrorMessage');
+      const searchButton = document.getElementById('searchButton');
+      const searchButtonText = document.getElementById('searchButtonText');
+      const loadingSpinnerElement = document.getElementById('loadingSpinnerElement');
+      const errorMessageTab = document.getElementById("errorMessageTab");
+      const resultsDisplayBox = document.getElementById("resultsDisplayBox");
+      const serviceCodeContainer = document.getElementById('serviceCodeContainer');
+      const identityNumberContainer = document.getElementById('identityNumberContainer');
+
+      // Validate empty fields first
+      if (!identityNumber || !serviceCode) {
+        emptyFieldsErrorMessage.style.display = 'block';
+        serviceCodeContainer.style.marginTop = '5px'; 
+        identityNumberContainer.style.marginTop = '5px'; 
+        errorMessageTab.style.display = 'none';
+        resultsDisplayBox.style.display = 'none';
+        return;
+      } else {
+        emptyFieldsErrorMessage.style.display = 'none';
+        serviceCodeContainer.style.marginTop = ''; 
+        identityNumberContainer.style.marginTop = ''; 
+      }
+
+      // Start loading state
+      loadingSpinnerElement.style.display = 'inline-block';
+      searchButton.classList.add('loading');
+      searchButton.disabled = true;
+      errorMessageTab.style.display = "none"; 
+      resultsDisplayBox.style.display = "none";
+
+      // Simulate processing delay
+      setTimeout(() => {
+        const storedMedicalLeaveData = JSON.parse(localStorage.getItem("leaveData")) || [];
+        const searchResult = storedMedicalLeaveData.find(record => record.leaveCode === serviceCode && record.idNumber === identityNumber);
+
+        // End loading state
+        loadingSpinnerElement.style.display = 'none';
+        searchButton.classList.remove('loading');
+        searchButton.disabled = false;
+
+        // Process search results
+        if (searchResult) {
+          resultsDisplayBox.innerHTML = `
+            <div class="information-label text-bold">الاسم</div><div class="information-data text-normal">${searchResult.name.trim()}</div>
+            <div class="information-label text-bold">تاريخ إصدار تقرير الاجازة</div><div class="information-data text-normal">${searchResult.date}</div>
+            <div class="information-label text-bold">تبدأ من</div><div class="information-data text-normal">${searchResult.from}</div>
+            <div class="information-label text-bold">وحتى</div><div class="information-data text-normal">${searchResult.to}</div>
+            <div class="information-label text-bold">المدة بالأيام</div><div class="information-data text-normal">${searchResult.days}</div>
+            <div class="information-label text-bold">اسم الطبيب</div><div class="information-data text-normal">${searchResult.doctor.trim()}</div>
+            <div class="information-label text-bold">المسمى الوظيفي</div><div class="information-data text-normal">${searchResult.title.trim()}</div>
+          `;
+          resultsDisplayBox.style.display = "block";
+          errorMessageTab.style.display = "none";
+          document.getElementById('searchButton').style.display = 'none';
+          document.getElementById('backButton').style.display = 'none';
+          document.getElementById('newSearchButton').style.display = 'block';
+          document.getElementById('backToListButton').style.display = 'block';
+        } else {
+          resultsDisplayBox.style.display = "none";
+          errorMessageTab.style.display = "block";
+          document.getElementById('searchButton').style.display = 'block'; 
+          document.getElementById('backButton').style.display = 'block';
+          document.getElementById('newSearchButton').style.display = 'none';
+          document.getElementById('backToListButton').style.display = 'none';
+        }
+      }, 2000);
+    }
+
+    // Hide Empty Field Error Message
+    function hideEmptyFieldError() {
+      const emptyFieldsErrorMessage = document.getElementById('emptyFieldsErrorMessage');
+      const serviceCodeContainer = document.getElementById('serviceCodeContainer');
+      const identityNumberContainer = document.getElementById('identityNumberContainer');
+      if (emptyFieldsErrorMessage.style.display === 'block') {
+          emptyFieldsErrorMessage.style.display = 'none';
+          serviceCodeContainer.style.marginTop = ''; 
+          identityNumberContainer.style.marginTop = ''; 
+      }
+    }
+
+    // Reset Form to Initial State
+    function resetFormToInitialState() {
+      const searchButton = document.getElementById('searchButton');
+      document.getElementById('identityNumber').value = '';
+      document.getElementById('serviceCode').value = '';
+      document.getElementById('errorMessageTab').style.display = 'none';
+      document.getElementById('emptyFieldsErrorMessage').style.display = 'none';
+      document.getElementById('resultsDisplayBox').style.display = 'none';
+      document.getElementById('searchButton').style.display = 'block';
+      document.getElementById('backButton').style.display = 'block';
+      document.getElementById('newSearchButton').style.display = 'none';
+      document.getElementById('backToListButton').style.display = 'none';
+      // Reset button state completely
+      document.getElementById('loadingSpinnerElement').style.display = 'none';
+      searchButton.classList.remove('loading');
+      searchButton.disabled = false;
+      // Reset margins
+      document.getElementById('serviceCodeContainer').style.marginTop = ''; 
+      document.getElementById('identityNumberContainer').style.marginTop = ''; 
+    }
+
+    // Perform New Search Action
+    function performNewSearch() {
+      resetFormToInitialState();
+    }
+
+    // Initialize Application on Page Load
+    window.addEventListener('load', () => {
+      document.getElementById('mainHeader').classList.add('show');
+      initializeApplicationData();
+      resetFormToInitialState();
+    });
+  </script>
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نموذج الإجازة المرضية</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </div>
+</div></center>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f8fa 0%, #e1e9ee 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header-logos {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        .logo-left img,
+        .logo-right img {
+            max-height: 100px;
+            width: auto;
+            object-fit: contain;
+        }
+        
+        .logo-left {
+            flex: 1;
+            text-align: right;
+        }
+        
+        .logo-right {
+            flex: 1;
+            text-align: left;
+        }
+        
+        .header-title {
+            text-align: center;
+            flex: 2;
+            padding: 0 30px;
+        }
+        
+        .app-name {
+            font-size: 26px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .app-description {
+            font-size: 16px;
+            color: #7f8c8d;
+            line-height: 1.5;
+        }
+        
+        .report-form {
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+        
+        textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+        
+        .date-group {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .date-group input {
+            flex: 1;
+        }
+        
+        .hijri-date {
+            background-color: #f8f9fa;
+            color: #6c757d;
+        }
+        
+        button {
+            background: linear-gradient(to right, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 16px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .response-section {
+            margin-top: 35px;
+            background: linear-gradient(to right, #e8f4f8, #d6e9f0);
+            padding: 25px;
+            border-radius: 12px;
+            border-right: 5px solid #3498db;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        .response-title {
+            color: #2c3e50;
+            margin-bottom: 18px;
+            font-weight: bold;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .response-title i {
+            margin-left: 10px;
+        }
+        
+        .response-message {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            min-height: 120px;
+            border: 2px dashed #3498db;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #777;
+            font-size: 15px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            text-align: center;
+            display: none;
+        }
+        
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+        
+        .alert-error {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header-logos {
+                flex-direction: column;
+                text-align: center;
+                padding: 15px;
+            }
+            
+            .logo-left, .logo-right {
+                margin: 10px 0;
+                text-align: center;
+                flex: none;
+            }
+            
+            .logo-left img,
+            .logo-right img {
+                max-height: 80px;
+            }
+            
+            .header-title {
+                padding: 10px 0;
+                flex: none;
+            }
+            
+            .app-name {
+                font-size: 22px;
+            }
+            
+            input, textarea, select, button {
+                font-size: 15px;
+            }
+            
+            .date-group {
+                flex-direction: column;
+            }
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <div id="alertMessage" class="alert"></div>
+        
+        <form class="report-form" id="sickLeaveForm">
+            <div class="form-group">
+                <label for="arabicName">الاسم باللغة العربية:</label>
+                <input type="text" id="arabicName" name="arabicName" required placeholder="أدخل اسمك باللغة العربية">
+            </div>
+            
+            <div class="form-group">
+                <label for="englishName">الاسم باللغة الإنجليزية:</label>
+                <input type="text" id="englishName" name="englishName" required placeholder="أدخل اسمك باللغة الإنجليزية">
+            </div>
+            
+            <div class="form-group">
+                <label for="idNumber">رقم الهوية:</label>
+                <input type="text" id="idNumber" name="idNumber" required placeholder="أدخل رقم هويتك">
+            </div>
+            
+            <div class="form-group">
+                <label for="phoneNumber">رقم الهاتف:</label>
+                <input type="tel" id="phoneNumber" name="phoneNumber" required placeholder="أدخل رقم هاتفك">
+            </div>
+            
+            <div class="form-group">
+                <label for="region">المنطقة:</label>
+                <input type="text" id="region" name="region" required placeholder="أدخل منطقتك">
+            </div>
+            
+            <div class="form-group">
+                <label for="reportType">نوع الإجازة المرضية:</label>
+                <select id="reportType" required>
+                    <option value="">اختر نوع الإجازة المرضية</option>
+                    <option value="university">جامعي</option>
+                    <option value="government">موظف قطاع حكومي</option>
+                    <option value="private">موظف قطاع خاص</option>
+                    <option value="military">عسكري</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>تاريخ إصدار تقرير الإجازة:</label>
+                <div class="date-group">
+                    <input type="date" id="issueDateGregorian" name="issueDateGregorian" required>
+                    <input type="text" id="issueDateHijri" name="issueDateHijri" class="hijri-date" readonly placeholder="التاريخ الهجري">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>تبدأ من:</label>
+                <div class="date-group">
+                    <input type="date" id="startDateGregorian" name="startDateGregorian" required>
+                    <input type="text" id="startDateHijri" name="startDateHijri" class="hijri-date" readonly placeholder="التاريخ الهجري">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>وحتى:</label>
+                <div class="date-group">
+                    <input type="date" id="endDateGregorian" name="endDateGregorian" required>
+                    <input type="text" id="endDateHijri" name="endDateHijri" class="hijri-date" readonly placeholder="التاريخ الهجري">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="duration">المدة بالأيام:</label>
+                <input type="number" id="duration" name="duration" min="1" required placeholder="عدد أيام الإجازة">
+            </div>
+            
+            <div class="form-group">
+                <label for="reportDetails">تفاصيل إضافية:</label>
+                <textarea id="reportDetails" name="reportDetails" placeholder="أدخل أي تفاصيل إضافية حول حالتك الصحية"></textarea>
+            </div>              
+                <button class="primary-btn" id="searchButton" onclick="validateAndCheckData()">
+    <span id="searchButtonText">ارسال طلب الإجازة</span>
+    <span id="loadingSpinnerElement" class="spinner-loading"></span>
+  </button>
+            </button>
+        </form>
+        
+        <div class="response-section">
+            <div class="response-title">
+            <img src="https://i.postimg.cc/cHQphC4q/image.png" alt="شعار صحة" class="brand-logo" />
+    <img src="https://i.postimg.cc/66S0ss5J/png-clipart-riyadh-ministry-of-health-yanbu-church-logo-leaf-text-thumbnail-(1).png" alt="شعار وزارة الصحة" class="brand-logo" />
+    <img src="https://i.postimg.cc/brf28SL4/ttbyq-shty.png" alt="شعار صحة" class="brand-logo" />
+    <img src="https://i.postimg.cc/zvd579bJ/ttbyq-shty-1.png" alt="شعار صحة" class="brand-logo" />
+             
+            </div>
+    <script>
+        // مكتبة بسيطة للتحويل من الميلادي إلى الهجري
+        function gregorianToHijri(date) {
+            const gDate = new Date(date);
+            const gYear = gDate.getFullYear();
+            const gMonth = gDate.getMonth() + 1;
+            const gDay = gDate.getDate();
+            
+            // معادلة تقريبية للتحويل (ليست دقيقة تماماً)
+            const hijriYear = Math.floor((gYear - 622) * (33/32));
+            const hijriMonth = gMonth;
+            const hijriDay = gDay;
+            
+            // تنسيق التاريخ الهجري
+            return `${hijriYear}/${hijriMonth}/${hijriDay} هـ`;
+        }
+
+        // إضافة مستمعين للحقول التاريخية للتحويل التلقائي
+        document.getElementById('issueDateGregorian').addEventListener('change', function() {
+            if(this.value) {
+                document.getElementById('issueDateHijri').value = gregorianToHijri(this.value);
+            }
+        });
+        
+        document.getElementById('startDateGregorian').addEventListener('change', function() {
+            if(this.value) {
+                document.getElementById('startDateHijri').value = gregorianToHijri(this.value);
+            }
+        });
+        
+        document.getElementById('endDateGregorian').addEventListener('change', function() {
+            if(this.value) {
+                document.getElementById('endDateHijri').value = gregorianToHijri(this.value);
+                
+                // حساب المدة تلقائياً
+                const startDate = new Date(document.getElementById('startDateGregorian').value);
+                const endDate = new Date(this.value);
+                
+                if(startDate && endDate && startDate <= endDate) {
+                    const diffTime = Math.abs(endDate - startDate);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+                    document.getElementById('duration').value = diffDays;
+                }
+            }
+        });
+
+        // معالجة إرسال النموذج
+        document.getElementById('sickLeaveForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // جمع بيانات النموذج
+            const arabicName = document.getElementById('arabicName').value;
+            const englishName = document.getElementById('englishName').value;
+            const idNumber = document.getElementById('idNumber').value;
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            const region = document.getElementById('region').value;
+            const reportType = document.getElementById('reportType');
+            const reportTypeText = reportType.options[reportType.selectedIndex].text;
+            const issueDateGregorian = document.getElementById('issueDateGregorian').value;
+            const issueDateHijri = document.getElementById('issueDateHijri').value;
+            const startDateGregorian = document.getElementById('startDateGregorian').value;
+            const startDateHijri = document.getElementById('startDateHijri').value;
+            const endDateGregorian = document.getElementById('endDateGregorian').value;
+            const endDateHijri = document.getElementById('endDateHijri').value;
+            const duration = document.getElementById('duration').value;
+            const reportDetails = document.getElementById('reportDetails').value;
+            
+            // إنشاء محتوى البريد الإلكتروني
+            const subject = `طلب إجازة مرضية - ${reportTypeText}`;
+            const body = `الاسم بالعربية: ${arabicName}%0D%0Aالاسم بالإنجليزية: ${englishName}%0D%0Aرقم الهوية: ${idNumber}%0D%0Aرقم الهاتف: ${phoneNumber}%0D%0Aالمنطقة: ${region}%0D%0Aنوع الإجازة: ${reportTypeText}%0D%0A%0D%0Aتفاصيل الإجازة:%0D%0A- تاريخ الإصدار (ميلادي): ${issueDateGregorian}%0D%0A- تاريخ الإصدار (هجري): ${issueDateHijri}%0D%0A- تبدأ من (ميلادي): ${startDateGregorian}%0D%0A- تبدأ من (هجري): ${startDateHijri}%0D%0A- تنتهي في (ميلادي): ${endDateGregorian}%0D%0A- تنتهي في (هجري): ${endDateHijri}%0D%0A- المدة: ${duration} يوم%0D%0A%0D%0Aالتفاصيل الإضافية:%0D%0A${reportDetails}%0D%0A%0D%0Aتم إرسال طلب الإجازة المرضية الإلكتروني.`;
+            
+            // فتح تطبيق البريد الإلكتروني
+            window.location.href = `mailto:seha.sa.2025@gmail.com?subject=${subject}&body=${body}`;
+            
+            // إظهار رسالة النجاح
+            const alertMessage = document.getElementById('alertMessage');
+            alertMessage.textContent = 'تم إعداد طلب الإجازة بنجاح';
+            alertMessage.className = 'alert alert-success';
+            alertMessage.style.display = 'block';
+            
+            // إظهار رسالة الاستجابة
+            document.getElementById('responseMessage').innerHTML = 
+                '<p><strong>رد الدعم الفني:</strong></p>' +
+                '<p>شكراً لتواصلكم معنا. تم إعداد طلب الإجازة المرضية بنجاح.</p>' +
+                '<p>يرجى إرسال البريد الإلكتروني الذي تم فتحه تلقائياً لتأكيد طلبك.</p>' +
+                '<p>سيتم مراجعة طلبك والرد عليه خلال 24-48 ساعة.</p>' +
+                '<p>مع تحياتنا،<br>منصة صحتي للإجازات المرضية</p>';
+            
+            // إعادة تعيين النموذج بعد تأخير بسيط
+            setTimeout(function() {
+                document.getElementById('sickLeaveForm').reset();
+            }, 3000);
+        });
+    </script>
+    
+</body>
+</html>
